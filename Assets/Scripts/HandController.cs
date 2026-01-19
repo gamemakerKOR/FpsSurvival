@@ -15,7 +15,8 @@ public class HandController : MonoBehaviour
     private bool isSwing = false;
 
     private RaycastHit hitInfo;
-
+    [SerializeField]
+    protected LayerMask layerMask;
 
     // Update is called once per frame
     void Update()
@@ -60,6 +61,9 @@ public class HandController : MonoBehaviour
         {
             if (CheckObject())
             {
+                if (hitInfo.transform.tag == "WeakAnimal")
+                    hitInfo.transform.GetComponent<WeakAnimal>().Damage(1, transform.position);
+
                 isSwing = false;
                 Debug.Log(hitInfo.transform.name);
             }
@@ -69,7 +73,7 @@ public class HandController : MonoBehaviour
 
     private bool CheckObject()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, currentHand.range))
+        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, currentHand.range, layerMask))
         {
             return true;
         }
